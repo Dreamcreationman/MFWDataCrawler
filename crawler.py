@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 
-url = "http://www.mafengwo.cn/jd/10061/gonglve.html"
+url = "http://www.mafengwo.cn/jd/10035/gonglve.html"
 querystring = []
 payload = ""
 headers = {
@@ -20,6 +20,13 @@ headers = {
 }
 response = requests.request("POST", url, data=payload, headers=headers, params=querystring)
 data = response.text
-
 with open("original.html", "w", encoding="utf-8") as fop:
     fop.write(data)
+soup  = BeautifulSoup(data, "html.parser")
+sights = soup.find("div", {"data-cs-p": "必游景点", "class": "row row-top5"})
+for sight in sights.find_all("div", {"class":"item clearfix"}):
+    href = sight.find("div", {"class":"middle"}).find("h3").find("a")["href"]
+    name = sight.find("div", {"class":"middle"}).find("h3").find("a")["title"]
+    num_comment = sight.find("div", {"class":"middle"}).find("h3").find("a").find("a").find("em").text
+    description = sight.find("div", {"class":"middle"}).find("p").text
+    print(href+", "+name+", "+num_comment+", "+description+"\n")
