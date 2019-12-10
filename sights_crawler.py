@@ -25,18 +25,24 @@ def get_conent(destination_id, payload, headers, querystring):
     data = response.text
     return data
 
+def get_info(sight_id):
+    url = "http://www.mafengwo.cn/poi/5015.html"
+    response = requests.request("POST", url, data=payload, headers=headers, params=querystring)
+    data = response.text
+    return data
+
 def get_destination_id():
     destination_ids = []
     with open("destination.csv", "r", encoding="utf-8") as fop:
         reader = csv.reader(fop)
-        head_row = next(reader)
+        next(reader)
         for row in reader:
             destination_ids.append(row[0])
     return destination_ids
 
 if __name__ == "__main__":
     with open("sight.csv", "w", encoding="utf-8") as sig_fop:
-        sig_fop.write("des_id, href, name, num_comment, description\n")
+        sig_fop.write("des_id, sight_id, name, num_comment, description\n")
         des_ids = get_destination_id()
         for did in des_ids:
             res = get_conent(did, payload, HEADERS, querystring)
@@ -54,4 +60,4 @@ if __name__ == "__main__":
                 except AttributeError:
                     num_comment = "0"
                 description = sight.find("div", {"class":"middle"}).find("p").text
-                sig_fop.write(did+", "+str(href).strip().strip("\n")+", "+str(name).strip().strip("\n")+", "+str(num_comment).strip().strip("\n")+", "+str(description).strip().strip("\n")+"\n")
+                sig_fop.write(did+", "+str(href).strip().strip("\n")[5:-5]+", "+str(name).strip().strip("\n")+", "+str(num_comment).strip().strip("\n")+", "+str(description).strip().strip("\n")+"\n")
