@@ -41,7 +41,7 @@ def get_destination_id():
     return destination_ids
 
 if __name__ == "__main__":
-    with open("sight.csv", "w", encoding="utf-8") as sig_fop:
+    with open("sights.csv", "w", encoding="utf-8") as sig_fop:
         sig_fop.write("des_id, sight_id, name, num_comment, description\n")
         des_ids = get_destination_id()
         for did in des_ids:
